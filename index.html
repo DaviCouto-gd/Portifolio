@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Davi Couto | Desenvolvedor e Analista de Dados</title>
+  <meta name="description" content="Portfólio de Davi Couto, desenvolvedor e analista de dados. Python, Java, SQL, Power BI, Docker e Linux.">
+
+  <!-- Fontes do Google -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Sora:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+  <style>
+    /* ===== CORES (mude aqui se quiser outra cor) ===== */
+    :root {
+      --fundo: #07100b;
+      --fundo-card: #0e1a13;
+      --borda: #1f3327;
+      --texto: #e8f0ea;
+      --texto-suave: #9bb0a2;
+      --verde: #7ed957;          /* verde do seu currículo */
+      --verde-escuro: #3f8f2a;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+
+    body {
+      font-family: 'Sora', sans-serif;
+      background: var(--fundo);
+      color: var(--texto);
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    .mono { font-family: 'JetBrains Mono', monospace; }
+
+    /* Barra de progresso de rolagem (fina, no topo) */
+    #progresso {
+      position: fixed; top: 0; left: 0; height: 3px; width: 0;
+      background: var(--verde); z-index: 100;
+    }
+
+    /* Luz verde que segue o mouse */
+    #luz {
+      position: fixed; width: 420px; height: 420px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(126,217,87,.13), transparent 65%);
+      pointer-events: none; transform: translate(-50%, -50%);
+      left: -500px; top: -500px; z-index: 0;
+    }
+
+    /* ===== MENU ===== */
+    header {
+      position: fixed; top: 0; width: 100%; z-index: 50;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 16px 6vw;
+      background: rgba(7,16,11,.8);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--borda);
+    }
+    .logo { font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--verde); }
+    nav { display: flex; gap: 28px; }
+    nav a { color: var(--texto-suave); font-size: .92rem; transition: color .25s; }
+    nav a:hover { color: var(--verde); }
+
+    section { position: relative; z-index: 1; padding: 110px 6vw; max-width: 1150px; margin: 0 auto; }
+    h2 { font-size: clamp(1.8rem, 4vw, 2.5rem); font-weight: 800; margin-bottom: 14px; }
+    .sub { color: var(--texto-suave); max-width: 60ch; margin-bottom: 44px; }
+
+    /* ===== INÍCIO (o terminal é o destaque da página) ===== */
+    #inicio {
+      min-height: 100vh; padding-top: 130px;
+      display: grid; grid-template-columns: 1.15fr .85fr; gap: 50px; align-items: center;
+    }
+    .ola { color: var(--verde); font-size: .95rem; margin-bottom: 10px; }
+    h1 { font-size: clamp(2.6rem, 7vw, 4.6rem); font-weight: 800; line-height: 1.05; margin-bottom: 18px; }
+    .cargo { font-size: 1.25rem; color: var(--texto-suave); margin-bottom: 30px; min-height: 2em; }
+    .cargo span { color: var(--verde); }
+    .cursor { display: inline-block; width: 10px; height: 1.1em; background: var(--verde);
+              vertical-align: text-bottom; margin-left: 3px; animation: piscar 1s steps(1) infinite; }
+    @keyframes piscar { 50% { opacity: 0; } }
+
+    .botoes { display: flex; gap: 14px; flex-wrap: wrap; }
+    .btn {
+      padding: 13px 26px; border-radius: 8px; font-weight: 600; font-size: .95rem;
+      border: 1px solid var(--verde); transition: transform .25s, box-shadow .25s, background .25s, color .25s;
+    }
+    .btn.cheio { background: var(--verde); color: #07100b; }
+    .btn:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(126,217,87,.28); }
+    .btn.vazio:hover { background: rgba(126,217,87,.1); }
+
+    /* Terminal */
+    .terminal {
+      background: #050c08; border: 1px solid var(--borda); border-radius: 12px;
+      box-shadow: 0 20px 60px rgba(0,0,0,.5), 0 0 0 1px rgba(126,217,87,.06);
+      overflow: hidden;
+    }
+    .terminal-topo { display: flex; align-items: center; gap: 7px; padding: 12px 16px; background: #0b1710; border-bottom: 1px solid var(--borda); }
+    .terminal-topo i { width: 11px; height: 11px; border-radius: 50%; background: #2a3d31; display: block; }
+    .terminal-topo i:first-child { background: #ff5f56; }
+    .terminal-topo i:nth-child(2) { background: #ffbd2e; }
+    .terminal-topo i:nth-child(3) { background: #27c93f; }
+    .terminal-topo span { margin-left: 10px; font-size: .78rem; color: var(--texto-suave); }
+    .terminal-corpo { padding: 20px; font-size: .85rem; line-height: 1.8; min-height: 290px; white-space: pre-wrap; }
+    .prompt { color: var(--verde); }
+    .dim { color: var(--texto-suave); }
+
+    /* ===== SOBRE ===== */
+    .sobre-grid { display: grid; grid-template-columns: 300px 1fr; gap: 50px; align-items: start; }
+    .foto-caixa { position: relative; }
+    .foto-caixa img {
+      width: 100%; aspect-ratio: 4 / 5; object-fit: cover; object-position: top;
+      border-radius: 14px; display: block; position: relative; z-index: 1;
+      filter: grayscale(.25); transition: filter .4s, transform .4s;
+    }
+    .foto-caixa::after {
+      content: ""; position: absolute; inset: 14px -14px -14px 14px;
+      border: 2px solid var(--verde); border-radius: 14px; z-index: 0;
+      transition: inset .4s;
+    }
+    .foto-caixa:hover img { filter: grayscale(0); transform: translate(-4px, -4px); }
+    .foto-caixa:hover::after { inset: 18px -18px -18px 18px; }
+    .sobre-texto p { color: var(--texto-suave); margin-bottom: 18px; }
+    .sobre-texto strong { color: var(--texto); font-weight: 600; }
+
+    .infos { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px; }
+    .info { padding: 10px 16px; border: 1px solid var(--borda); border-radius: 8px; background: var(--fundo-card); font-size: .88rem; }
+    .info b { color: var(--verde); font-weight: 600; }
+
+    /* ===== HABILIDADES ===== */
+    .habilidades-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+    .caixa { background: var(--fundo-card); border: 1px solid var(--borda); border-radius: 14px; padding: 28px; }
+    .caixa h3 { font-size: 1.05rem; margin-bottom: 18px; }
+    .chips { display: flex; flex-wrap: wrap; gap: 10px; }
+    .chip {
+      font-family: 'JetBrains Mono', monospace; font-size: .83rem;
+      padding: 8px 14px; border-radius: 6px; border: 1px solid var(--borda);
+      background: rgba(126,217,87,.05); color: var(--texto);
+      transition: transform .2s, background .2s, border-color .2s, color .2s; cursor: default;
+    }
+    .chip:hover { transform: translateY(-4px) rotate(-2deg); background: var(--verde); border-color: var(--verde); color: #07100b; }
+
+    /* ===== PROJETOS ===== */
+    .projetos-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 22px; }
+    .projeto {
+      display: block; background: var(--fundo-card); border: 1px solid var(--borda);
+      border-radius: 14px; padding: 28px; position: relative; overflow: hidden;
+      transition: transform .3s, border-color .3s;
+      transform-style: preserve-3d;
+    }
+    .projeto::before {
+      content: ""; position: absolute; left: 0; top: 0; height: 100%; width: 3px; background: var(--verde);
+      transform: scaleY(0); transform-origin: top; transition: transform .35s;
+    }
+    .projeto:hover { border-color: var(--verde-escuro); }
+    .projeto:hover::before { transform: scaleY(1); }
+    .projeto h3 { font-size: 1.1rem; margin-bottom: 8px; }
+    .projeto p { color: var(--texto-suave); font-size: .9rem; margin-bottom: 18px; }
+    .projeto .ver { color: var(--verde); font-size: .88rem; font-weight: 600; }
+    .projeto .ver::after { content: " ↗"; display: inline-block; transition: transform .25s; }
+    .projeto:hover .ver::after { transform: translate(3px, -3px); }
+
+    /* ===== TRAJETÓRIA ===== */
+    .linha { border-left: 2px solid var(--borda); margin-left: 8px; }
+    .marco { position: relative; padding: 0 0 38px 34px; }
+    .marco:last-child { padding-bottom: 0; }
+    .marco::before {
+      content: ""; position: absolute; left: -9px; top: 6px; width: 16px; height: 16px;
+      border-radius: 50%; background: var(--fundo); border: 3px solid var(--verde);
+      transition: background .3s, box-shadow .3s;
+    }
+    .marco:hover::before { background: var(--verde); box-shadow: 0 0 0 6px rgba(126,217,87,.18); }
+    .marco .data { font-size: .8rem; color: var(--verde); }
+    .marco h3 { font-size: 1.1rem; margin: 2px 0 4px; }
+    .marco p { color: var(--texto-suave); font-size: .92rem; max-width: 62ch; }
+
+    /* ===== CONTATO ===== */
+    #contato { text-align: center; }
+    #contato .sub { margin-left: auto; margin-right: auto; }
+    .contatos { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; }
+    .contato-link {
+      display: flex; align-items: center; gap: 10px; padding: 14px 24px;
+      background: var(--fundo-card); border: 1px solid var(--borda); border-radius: 10px;
+      transition: transform .25s, border-color .25s, box-shadow .25s;
+    }
+    .contato-link:hover { transform: translateY(-4px); border-color: var(--verde); box-shadow: 0 10px 28px rgba(126,217,87,.15); }
+    .contato-link svg { width: 20px; height: 20px; fill: var(--verde); flex-shrink: 0; }
+
+    footer { position: relative; z-index: 1; text-align: center; padding: 30px; color: var(--texto-suave); font-size: .82rem; border-top: 1px solid var(--borda); }
+
+    /* ===== Aparecer ao rolar (bem discreto) ===== */
+    .aparecer { opacity: 0; transform: translateY(18px); transition: opacity .7s, transform .7s; }
+    .aparecer.visivel { opacity: 1; transform: none; }
+
+    /* ===== CELULAR ===== */
+    @media (max-width: 860px) {
+      nav { display: none; }
+      #inicio { grid-template-columns: 1fr; padding-top: 110px; }
+      .sobre-grid { grid-template-columns: 1fr; }
+      .foto-caixa { max-width: 260px; }
+      .habilidades-grid { grid-template-columns: 1fr; }
+      #luz { display: none; }
+    }
+
+    /* Respeita quem desativa animações no celular/computador */
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important; transition: none !important; }
+      .aparecer { opacity: 1; transform: none; }
+      html { scroll-behavior: auto; }
+    }
+
+    a:focus-visible, .btn:focus-visible { outline: 2px solid var(--verde); outline-offset: 3px; }
+  </style>
+</head>
+<body>
+  <div id="progresso"></div>
+  <div id="luz"></div>
+
+  <header>
+    <a href="#inicio" class="logo">davi@couto:~$</a>
+    <nav>
+      <a href="#sobre">Sobre</a>
+      <a href="#habilidades">Habilidades</a>
+      <a href="#projetos">Projetos</a>
+      <a href="#trajetoria">Trajetória</a>
+      <a href="#contato">Contato</a>
+    </nav>
+  </header>
+
+  <main>
+    <!-- INÍCIO -->
+    <section id="inicio">
+      <div>
+        <p class="ola mono">Olá, eu sou o</p>
+        <h1>Davi Couto</h1>
+        <p class="cargo">
+          <span id="digitando"></span><span class="cursor"></span>
+        </p>
+        <div class="botoes">
+          <a href="#projetos" class="btn cheio">Ver meus projetos</a>
+          <a href="#contato" class="btn vazio">Falar comigo</a>
+        </div>
+      </div>
+
+      <!-- Terminal que digita sozinho -->
+      <div class="terminal" aria-hidden="true">
+        <div class="terminal-topo"><i></i><i></i><i></i><span class="mono">davi@couto: ~</span></div>
+        <div class="terminal-corpo mono" id="terminal"></div>
+      </div>
+    </section>
+
+    <!-- SOBRE -->
+    <section id="sobre">
+      <h2 class="aparecer">Sobre mim</h2>
+      <div class="sobre-grid">
+        <div class="foto-caixa aparecer">
+          <img src="foto.jpg" alt="Foto de Davi Couto sorrindo">
+        </div>
+        <div class="sobre-texto aparecer">
+          <p>Sou <strong>desenvolvedor e analista de dados</strong>, com conhecimento em Python, Java e SQL, aplicados no desenvolvimento de soluções e no tratamento e análise de dados.</p>
+          <p>Tenho experiência com <strong>DAX e Power BI</strong> para criar dashboards e relatórios, e também me sinto em casa no <strong>Linux</strong>. Gosto muito de Virtualização (VMs), <strong>Docker</strong> e Cloud Computing.</p>
+          <p>Comecei a programar aos 12 anos, com C++, e depois me aprofundei em Python e Java. Sou proativo e tenho um forte interesse por tecnologia.</p>
+          <div class="infos">
+            <div class="info"><b>Estudo:</b> ADS na Fatec</div>
+            <div class="info"><b>Inglês:</b> intermediário</div>
+            <div class="info"><b>Idioma nativo:</b> português</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- HABILIDADES -->
+    <section id="habilidades">
+      <h2 class="aparecer">Habilidades</h2>
+      <p class="sub aparecer">As linguagens e ferramentas que eu uso nos meus projetos.</p>
+      <div class="habilidades-grid">
+        <div class="caixa aparecer">
+          <h3>Linguagens de programação</h3>
+          <div class="chips">
+            <span class="chip">DAX</span>
+            <span class="chip">Python</span>
+            <span class="chip">Java</span>
+            <span class="chip">SQL</span>
+            <span class="chip">Shell Script</span>
+            <span class="chip">JavaScript</span>
+            <span class="chip">C++</span>
+          </div>
+        </div>
+        <div class="caixa aparecer">
+          <h3>Recursos que conheço</h3>
+          <div class="chips">
+            <span class="chip">Banco de Dados</span>
+            <span class="chip">Power BI</span>
+            <span class="chip">Linux</span>
+            <span class="chip">Docker</span>
+            <span class="chip">Virtual Machines</span>
+            <span class="chip">Git</span>
+            <span class="chip">Excel</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJETOS -->
+    <section id="projetos">
+      <h2 class="aparecer">Projetos</h2>
+      <p class="sub aparecer">Dashboards e projetos que eu criei. Clique para abrir.</p>
+      <div class="projetos-grid">
+        <!-- DICA: troque o título e a descrição de cada projeto abaixo -->
+        <a class="projeto aparecer" href="https://tinyurl.com/mupseh9t" target="_blank" rel="noopener">
+          <h3>Projeto 1</h3>
+          <p>Dashboard no Power BI com linguagem DAX.</p>
+          <span class="ver">Abrir projeto</span>
+        </a>
+        <a class="projeto aparecer" href="https://tinyurl.com/5ed3zezb" target="_blank" rel="noopener">
+          <h3>Projeto 2</h3>
+          <p>Análise e tratamento de dados.</p>
+          <span class="ver">Abrir projeto</span>
+        </a>
+        <a class="projeto aparecer" href="https://tinyurl.com/4tr8kepm" target="_blank" rel="noopener">
+          <h3>Projeto 3</h3>
+          <p>Dashboard conectado a uma API.</p>
+          <span class="ver">Abrir projeto</span>
+        </a>
+        <a class="projeto aparecer" href="https://tinyurl.com/mbumnh2j" target="_blank" rel="noopener">
+          <h3>Projeto 4</h3>
+          <p>Desenvolvimento de soluções com programação.</p>
+          <span class="ver">Abrir projeto</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- TRAJETÓRIA -->
+    <section id="trajetoria">
+      <h2 class="aparecer">Trajetória</h2>
+      <p class="sub aparecer">Meu caminho até aqui, da escola à faculdade.</p>
+      <div class="linha">
+        <div class="marco aparecer">
+          <span class="data mono">aos 12 anos</span>
+          <h3>Primeiras linhas de código</h3>
+          <p>Comecei a programar com C++ e depois escolhi me aprofundar em Python e Java.</p>
+        </div>
+        <div class="marco aparecer">
+          <span class="data mono">2019 - 2025</span>
+          <h3>Colégio Inspire</h3>
+          <p>Ensino Médio e Anos Finais.</p>
+        </div>
+        <div class="marco aparecer">
+          <span class="data mono">2026 - 2028</span>
+          <h3>Fatec, Análise e Desenvolvimento de Sistemas</h3>
+          <p>Projetos em ambiente Linux, com Docker e máquinas virtuais no Oracle VirtualBox. Também criei vários dashboards no Power BI, com DAX, para projetos próprios e para APIs.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTATO -->
+    <section id="contato">
+      <h2 class="aparecer">Vamos conversar?</h2>
+      <p class="sub aparecer">Quer falar sobre um projeto, uma vaga ou uma ideia? Escolha o jeito que for melhor para você.</p>
+      <div class="contatos aparecer">
+        <a class="contato-link" href="mailto:davi.couto.nascimento@gmail.com">
+          <svg viewBox="0 0 24 24"><path d="M2 5h20v14H2z" fill="none" stroke="#7ed957" stroke-width="2"/><path d="M2 6l10 8 10-8" fill="none" stroke="#7ed957" stroke-width="2"/></svg>
+          davi.couto.nascimento@gmail.com
+        </a>
+        <a class="contato-link" href="https://github.com/DaviCouto-gd" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24"><path d="M12 .5a11.5 11.5 0 00-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.87-1.54-3.87-1.54-.52-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.15.08 1.76 1.19 1.76 1.19 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 015.78 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.69 5.39-5.25 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0012 .5z"/></svg>
+          DaviCouto-gd
+        </a>
+        <a class="contato-link" href="https://wa.me/5512981307974" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24"><path d="M6.6 10.8a15.1 15.1 0 006.6 6.6l2.2-2.2a1 1 0 011-.25 11.4 11.4 0 003.6.57 1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.45.57 3.57a1 1 0 01-.25 1z"/></svg>
+          (12) 98130-7974
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p class="mono">Feito por Davi Couto &copy; <span id="ano"></span></p>
+  </footer>
+
+  <script>
+    // ===== 1) Ano automático no rodapé =====
+    document.getElementById('ano').textContent = new Date().getFullYear();
+
+    // ===== 2) Barra de progresso ao rolar a página =====
+    const barra = document.getElementById('progresso');
+    window.addEventListener('scroll', () => {
+      const alturaTotal = document.documentElement.scrollHeight - window.innerHeight;
+      barra.style.width = (window.scrollY / alturaTotal * 100) + '%';
+    });
+
+    // ===== 3) Luz que segue o mouse =====
+    const luz = document.getElementById('luz');
+    window.addEventListener('mousemove', (e) => {
+      luz.style.left = e.clientX + 'px';
+      luz.style.top = e.clientY + 'px';
+    });
+
+    // ===== 4) Cargo que troca sozinho (efeito de digitar) =====
+    const cargos = ['Desenvolvedor', 'Analista de Dados', 'Dashboards com Power BI', 'Entusiasta de Docker e Cloud'];
+    const alvo = document.getElementById('digitando');
+    let c = 0, letra = 0, apagando = false;
+
+    function digitar() {
+      const palavra = cargos[c];
+      alvo.textContent = palavra.substring(0, letra);
+
+      if (!apagando && letra < palavra.length) { letra++; setTimeout(digitar, 80); }
+      else if (!apagando) { apagando = true; setTimeout(digitar, 1500); }
+      else if (letra > 0) { letra--; setTimeout(digitar, 40); }
+      else { apagando = false; c = (c + 1) % cargos.length; setTimeout(digitar, 300); }
+    }
+    digitar();
+
+    // ===== 5) Terminal que digita comandos =====
+    const terminal = document.getElementById('terminal');
+    const linhas = [
+      { cmd: 'whoami', saida: 'davi-couto' },
+      { cmd: 'cat curso.txt', saida: 'Análise e Desenvolvimento de Sistemas (Fatec)' },
+      { cmd: 'ls habilidades/', saida: 'python  java  sql  dax  shell  javascript  c++' },
+      { cmd: 'docker ps', saida: 'portfolio   Up e funcionando' },
+      { cmd: 'echo $STATUS', saida: 'aberto a novos projetos' }
+    ];
+
+    function escrever(texto, ms, depois) {
+      let i = 0;
+      const t = setInterval(() => {
+        terminal.innerHTML += texto[i] === '<' ? '&lt;' : texto[i];
+        i++;
+        if (i >= texto.length) { clearInterval(t); depois(); }
+      }, ms);
+    }
+
+    function rodarLinha(n) {
+      if (n >= linhas.length) {
+        terminal.innerHTML += '<span class="prompt">$ </span><span class="cursor"></span>';
+        return;
+      }
+      terminal.innerHTML += '<span class="prompt">$ </span>';
+      escrever(linhas[n].cmd, 55, () => {
+        terminal.innerHTML += '\n<span class="dim">' + linhas[n].saida + '</span>\n';
+        setTimeout(() => rodarLinha(n + 1), 450);
+      });
+    }
+
+    // Se a pessoa prefere menos animação, mostra tudo de uma vez
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      terminal.innerHTML = linhas.map(l =>
+        '<span class="prompt">$ </span>' + l.cmd + '\n<span class="dim">' + l.saida + '</span>\n').join('');
+    } else {
+      setTimeout(() => rodarLinha(0), 600);
+    }
+
+    // ===== 6) Cartões de projeto inclinam com o mouse =====
+    document.querySelectorAll('.projeto').forEach(card => {
+      card.addEventListener('mousemove', (e) => {
+        const r = card.getBoundingClientRect();
+        const x = (e.clientX - r.left) / r.width - 0.5;
+        const y = (e.clientY - r.top) / r.height - 0.5;
+        card.style.transform = `perspective(700px) rotateY(${x * 8}deg) rotateX(${-y * 8}deg) translateY(-4px)`;
+      });
+      card.addEventListener('mouseleave', () => { card.style.transform = ''; });
+    });
+
+    // ===== 7) Seções aparecem suavemente ao rolar =====
+    const observador = new IntersectionObserver((itens) => {
+      itens.forEach(item => {
+        if (item.isIntersecting) { item.target.classList.add('visivel'); observador.unobserve(item.target); }
+      });
+    }, { threshold: 0.15 });
+    document.querySelectorAll('.aparecer').forEach(el => observador.observe(el));
+  </script>
+</body>
+</html>
